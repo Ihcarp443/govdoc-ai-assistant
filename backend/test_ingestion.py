@@ -4,15 +4,18 @@ from services.document_ingestion import (
 
 service = DocumentIngestionService()
 
-result = service.process_pdf(
-    "test.pdf"
-)
+result = service.process_pdf("test.pdf")
 
-for page in result:
+print(f"\nDocument ID : {result['document_id']}")
+print(f"Filename    : {result['filename']}")
+print(f"Total Pages : {len(result['pages'])}")
 
-    print("\n===================")
-    print("PAGE:", page["page"])
-    print("SOURCE:", page["source"])
-    print("===================")
+for page in result["pages"]:
 
-    print(page["text"][:500])
+    print("\n--------------------------------")
+    print(f"Page    : {page['page']}")
+    print(f"Source  : {page['source']}")
+    print(f"Words   : {len(page['text'].split())}")
+    print("--------------------------------")
+
+    print(page["text"][:300])

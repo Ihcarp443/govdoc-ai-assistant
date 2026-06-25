@@ -1,3 +1,4 @@
+# D:\project2\backend\providers\ocr\easyocr_provider.py
 import easyocr
 
 class EasyOCRProvider:

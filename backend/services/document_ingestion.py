@@ -1,6 +1,8 @@
+# D:\project2\backend\services\document_ingestion.py
 from providers.pdf.pdf_extractor import PDFExtractor
 from providers.ocr.easyocr_provider import EasyOCRProvider
-
+import os
+import uuid
 
 class DocumentIngestionService:
 
@@ -24,7 +26,7 @@ class DocumentIngestionService:
 
             source = "pdf_text"
 
-            if len(extracted_text) < 100:
+            if len(extracted_text.split()) < 20:
 
                 extracted_text = self.ocr_provider.extract_text(
                     page["image_path"]
@@ -35,7 +37,16 @@ class DocumentIngestionService:
             processed_pages.append({
                 "page": page["page"],
                 "source": source,
+                "image_path": page["image_path"],
+                "word_count": len(extracted_text.split()),
                 "text": extracted_text
             })
 
-        return processed_pages
+       
+
+        return {
+            "document_id": str(uuid.uuid4()),
+            "filename": os.path.basename(pdf_path),
+            "pages": processed_pages
+        }
+        # return processed_pages

@@ -1,3 +1,4 @@
+# D:\project2\backend\providers\pdf\pdf_extractor.py
 import fitz
 import os
 
