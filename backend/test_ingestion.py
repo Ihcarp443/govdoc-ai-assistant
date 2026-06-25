@@ -4,12 +4,12 @@ from services.document_ingestion import (
 
 service = DocumentIngestionService()
 
-result = service.process_pdf("test.pdf")
+result = service.process_pdf("notice.pdf")
 
 print(f"\nDocument ID : {result['document_id']}")
 print(f"Filename    : {result['filename']}")
 print(f"Total Pages : {len(result['pages'])}")
-
+print(f"Document Type: {result['metadata']['document_type']}")
 for page in result["pages"]:
 
     print("\n--------------------------------")

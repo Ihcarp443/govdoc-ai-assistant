@@ -3,6 +3,8 @@ from providers.pdf.pdf_extractor import PDFExtractor
 from providers.ocr.easyocr_provider import EasyOCRProvider
 import os
 import uuid
+from services.document_classifier import DocumentClassifier
+from providers.llm.gemini_provider import GeminiProvider
 
 class DocumentIngestionService:
 
@@ -10,6 +12,10 @@ class DocumentIngestionService:
 
         self.pdf_extractor = PDFExtractor()
         self.ocr_provider = EasyOCRProvider()
+
+        self.document_classifier = DocumentClassifier(
+            GeminiProvider()
+        )
 
     def process_pdf(self, pdf_path):
 
@@ -42,11 +48,21 @@ class DocumentIngestionService:
                 "text": extracted_text
             })
 
-       
-
+        document_type = self.document_classifier.classify(processed_pages)
         return {
             "document_id": str(uuid.uuid4()),
             "filename": os.path.basename(pdf_path),
+
+            "metadata": {
+                "document_type": document_type
+            },
+
             "pages": processed_pages
         }
+
+        # return {
+        #     "document_id": str(uuid.uuid4()),
+        #     "filename": os.path.basename(pdf_path),
+        #     "pages": processed_pages
+        # }
         # return processed_pages

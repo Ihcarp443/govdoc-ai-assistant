@@ -10,3 +10,5 @@ chroma_db/
 
 .idea/
 .vscode/
+
+backend/backend/data/pages/
