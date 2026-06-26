@@ -22,3 +22,10 @@ pymupdf
 sqlalchemy
 
 pydantic
+
+langchain-text-splitters
+
+sentence-transformers
+faiss-cpu
+
+langchain-huggingface
