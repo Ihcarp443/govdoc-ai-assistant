@@ -1,11 +1,12 @@
 # D:\project2\backend\services\document_ingestion.py
-from providers.pdf.pdf_extractor import PDFExtractor
-from providers.ocr.easyocr_provider import EasyOCRProvider
 import os
 import uuid
+from providers.pdf.pdf_extractor import PDFExtractor
+from providers.ocr.easyocr_provider import EasyOCRProvider
 from services.document_classifier import DocumentClassifier
 from providers.llm.gemini_provider import GeminiProvider
-
+from services.structure_extractor import StructureExtractor
+from providers.layout.docling_provider import DoclingProvider
 class DocumentIngestionService:
 
     def __init__(self):
@@ -13,9 +14,9 @@ class DocumentIngestionService:
         self.pdf_extractor = PDFExtractor()
         self.ocr_provider = EasyOCRProvider()
 
-        self.document_classifier = DocumentClassifier(
-            GeminiProvider()
-        )
+        self.document_classifier = DocumentClassifier(GeminiProvider())
+        self.structure_extractor = StructureExtractor(GeminiProvider())
+        self.layout_provider = DoclingProvider()
 
     def process_pdf(self, pdf_path):
 
@@ -49,12 +50,18 @@ class DocumentIngestionService:
             })
 
         document_type = self.document_classifier.classify(processed_pages)
+        layout_markdown = self.layout_provider.extract_layout(pdf_path)
+        print(f"\nLayout Markdown:\n{layout_markdown}\n")
+        structure = self.structure_extractor.extract(processed_pages, layout_markdown)
+        print(f"\nExtracted Structure:\n{structure}\n")
+        
         return {
             "document_id": str(uuid.uuid4()),
             "filename": os.path.basename(pdf_path),
 
             "metadata": {
-                "document_type": document_type
+                "document_type": document_type,
+                "structure": structure["sections"]
             },
 
             "pages": processed_pages

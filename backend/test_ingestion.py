@@ -10,6 +10,7 @@ print(f"\nDocument ID : {result['document_id']}")
 print(f"Filename    : {result['filename']}")
 print(f"Total Pages : {len(result['pages'])}")
 print(f"Document Type: {result['metadata']['document_type']}")
+print(f"Structure   : {result['metadata']['structure']}")
 for page in result["pages"]:
 
     print("\n--------------------------------")
