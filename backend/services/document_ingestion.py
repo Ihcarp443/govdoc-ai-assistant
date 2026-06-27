@@ -49,6 +49,7 @@ class DocumentIngestionService:
             })
 
         document_type = self.document_classifier.classify(processed_pages)
+        # document_type = "unlabeled"
         return {
             "document_id": str(uuid.uuid4()),
             "filename": os.path.basename(pdf_path),

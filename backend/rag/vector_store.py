@@ -1,5 +1,100 @@
-# rag/faiss_store.py
+# # rag/faiss_store.py
 
+# import faiss
+# import pickle
+# import numpy as np
+
+
+# class FAISSStore:
+
+#     def __init__(self, dimension):
+
+#         self.index = faiss.IndexFlatIP(
+#             dimension
+#         )
+
+#         self.metadata = []
+
+#     def add_documents(
+#         self,
+#         embeddings,
+#         chunks
+#     ):
+
+#         embeddings = np.array(
+#             embeddings,
+#             dtype=np.float32
+#         )
+
+#         self.index.add(
+#             embeddings
+#         )
+
+#         self.metadata.extend(
+#             chunks
+#         )
+
+#     def save(self):
+
+#         faiss.write_index(
+#             self.index,
+#             "DB/faiss.index"
+#         )
+
+#         with open(
+#             "DB/metadata.pkl",
+#             "wb"
+#         ) as f:
+
+#             pickle.dump(
+#                 self.metadata,
+#                 f
+#             )
+
+#     @classmethod
+#     def load(cls):
+
+#         index = faiss.read_index(
+#             "DB/faiss.index"
+#         )
+
+#         with open(
+#             "DB/metadata.pkl",
+#             "rb"
+#         ) as f:
+
+#             metadata = pickle.load(f)
+
+#         store = cls(
+#             index.d
+#         )
+
+#         store.index = index
+#         store.metadata = metadata
+
+#         return store
+    
+#     def search(self,query_embedding,k=5):
+
+#         scores, indices = (
+#             self.index.search(
+#                 query_embedding,
+#                 k
+#             )
+#         )
+
+#         results = []
+
+#         for idx in indices[0]:
+
+#             results.append(
+#                 self.metadata[idx]
+#             )
+
+#         return results
+    
+
+import os
 import faiss
 import pickle
 import numpy as np
@@ -7,90 +102,67 @@ import numpy as np
 
 class FAISSStore:
 
-    def __init__(self, dimension):
+    def __init__(self, dimension, user_id):
 
-        self.index = faiss.IndexFlatIP(
-            dimension
-        )
+        self.dimension = dimension
+        self.user_id = str(user_id)
 
-        self.metadata = []
+        self.folder = os.path.join("DB", self.user_id)
+        self.index_path = os.path.join(self.folder, "faiss.index")
+        self.metadata_path = os.path.join(self.folder, "metadata.pkl")
 
-    def add_documents(
-        self,
-        embeddings,
-        chunks
-    ):
+        os.makedirs(self.folder, exist_ok=True)
 
-        embeddings = np.array(
+        if os.path.exists(self.index_path):
+
+            self.index = faiss.read_index(self.index_path)
+
+            with open(self.metadata_path, "rb") as f:
+                self.metadata = pickle.load(f)
+
+        else:
+
+            self.index = faiss.IndexFlatIP(dimension)
+            self.metadata = []
+
+    def add_documents(self, embeddings, chunks):
+
+        embeddings = np.asarray(
             embeddings,
             dtype=np.float32
         )
 
-        self.index.add(
-            embeddings
-        )
+        self.index.add(embeddings)
 
-        self.metadata.extend(
-            chunks
-        )
+        self.metadata.extend(chunks)
 
     def save(self):
 
         faiss.write_index(
             self.index,
-            "DB/faiss.index"
+            self.index_path
         )
 
-        with open(
-            "DB/metadata.pkl",
-            "wb"
-        ) as f:
+        with open(self.metadata_path, "wb") as f:
+            pickle.dump(self.metadata, f)
 
-            pickle.dump(
-                self.metadata,
-                f
-            )
+    def search(self, query_embedding, k=5):
 
-    @classmethod
-    def load(cls):
-
-        index = faiss.read_index(
-            "DB/faiss.index"
-        )
-
-        with open(
-            "DB/metadata.pkl",
-            "rb"
-        ) as f:
-
-            metadata = pickle.load(f)
-
-        store = cls(
-            index.d
-        )
-
-        store.index = index
-        store.metadata = metadata
-
-        return store
-    
-    def search(self,query_embedding,k=5):
-
-        scores, indices = (
-            self.index.search(
-                query_embedding,
-                k
-            )
+        scores, indices = self.index.search(
+            query_embedding,
+            k
         )
 
         results = []
 
-        for idx in indices[0]:
+        for score, idx in zip(scores[0], indices[0]):
 
-            results.append(
-                self.metadata[idx]
-            )
+            if idx == -1:
+                continue
+
+            results.append({
+                "score": float(score),
+                **self.metadata[idx]
+            })
 
         return results
-    
-

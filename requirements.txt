@@ -29,3 +29,8 @@ sentence-transformers
 faiss-cpu
 
 langchain-huggingface
+
+google-genai
+
+python-docx
+reportlab

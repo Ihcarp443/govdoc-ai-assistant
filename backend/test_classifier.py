@@ -13,7 +13,7 @@ from providers.llm.gemini_provider import (
 ingestion = DocumentIngestionService()
 
 document = ingestion.process_pdf(
-    "tender 1-1-4.pdf"
+    "./Testing Data/Policy 3 Government Guarantee Policy.pdf"
 )
 
 classifier = DocumentClassifier(
@@ -25,4 +25,4 @@ document_type = classifier.classify(
 )
 
 print("\nDocument Type:")
-print(document_type)
+print(document_type) 
