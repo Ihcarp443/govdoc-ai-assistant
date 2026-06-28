@@ -1,6 +1,6 @@
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from rag.vector_store import FAISSStore
-
+from rag.document_store import DocumentStore
 
 class Retriever:
 
@@ -12,7 +12,10 @@ class Retriever:
         )
 
         self.reranker = CrossEncoder(
-        "BAAI/bge-reranker-base"
+            "BAAI/bge-reranker-base"
+        )
+        self.document_store = DocumentStore(
+            user_id=user_id
         )
 
         dimension = self.embedding_model.get_sentence_embedding_dimension()
@@ -97,7 +100,7 @@ class Retriever:
 
             results.append({
 
-                "user_id": self.user_id,
+                "user_id": self.user_id or None,
 
                 "score": round(float(rerank_score), 4),
 
@@ -149,3 +152,44 @@ class Retriever:
             print("\n--------------------------------------------------\n")
 
         return results
+    
+    def retrieve_documents(
+        self,
+        query: str,
+        top_k: int = 3
+    ):
+
+        chunks = self.retrieve(
+            query=query,
+            top_k=top_k * 3
+        )
+
+        if not chunks:
+            return []
+
+        grouped = {}
+
+        for chunk in chunks:
+
+            doc_id = chunk["document_id"]
+
+            if doc_id not in grouped:
+                grouped[doc_id] = []
+
+            grouped[doc_id].append(chunk)
+
+        documents = []
+
+        for doc_id, doc_chunks in grouped.items():
+
+            document = self.document_store.get_document(doc_id)
+
+            if not document:
+                continue
+
+            document = document.copy()
+            document["chunks"] = doc_chunks
+
+            documents.append(document)
+
+        return documents

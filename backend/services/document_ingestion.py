@@ -61,8 +61,29 @@ class DocumentIngestionService:
             "filename": os.path.basename(pdf_path),
 
             "metadata": {
+
                 "document_type": document_type,
-                "structure": structure["sections"]
+
+                "structure": structure["sections"],
+
+                "document_flow": [
+                    section["heading"]
+                    for section in structure["sections"]
+                ],
+
+                "section_count": len(structure["sections"]),
+
+                "total_pages": len(processed_pages),
+
+                "ocr_pages": sum(
+                    1 for page in processed_pages
+                    if page["source"] == "ocr"
+                ),
+
+                "languages": list({
+                    page.get("language", "unknown")
+                    for page in processed_pages
+                })
             },
 
             "pages": processed_pages
