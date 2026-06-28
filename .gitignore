@@ -12,3 +12,6 @@ chroma_db/
 .vscode/
 
 backend/backend/data/pages/
+
+venv/
+.venv/

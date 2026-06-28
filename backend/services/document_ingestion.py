@@ -55,6 +55,7 @@ class DocumentIngestionService:
         structure = self.structure_extractor.extract(processed_pages, layout_markdown)
         print(f"\nExtracted Structure:\n{structure}\n")
         
+        # document_type = "unlabeled"
         return {
             "document_id": str(uuid.uuid4()),
             "filename": os.path.basename(pdf_path),

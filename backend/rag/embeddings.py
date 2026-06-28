@@ -8,6 +8,10 @@ class EmbeddingService:
         self.model = SentenceTransformer(
             "BAAI/bge-small-en-v1.5"
         )
+        self.dimension = (
+            self.model.get_sentence_embedding_dimension()
+        )
+
 
     def create_embeddings(self, chunks):
 
