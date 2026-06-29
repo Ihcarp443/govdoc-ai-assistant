@@ -1,5 +1,5 @@
 from graph.state import GraphState
-from services.llm_service import model
+from providers.llm.hf_provider import HfProvider
 
 prompt = """
 You are an intent classifier for a Government Document Assistant.
@@ -57,8 +57,9 @@ User Query:
 def intent_node(state: GraphState):
 
     user_question = state["user_question"]
+    model = HfProvider()
 
-    response = model.invoke(
+    response = model.generate(
         prompt.format(user_question)
     )
 
@@ -70,5 +71,5 @@ def route(state):
 
     if state["intent"] == "draft":
         return "draft"
-
+    
     return "rag"

@@ -1,0 +1,216 @@
+{
+    "295c0255-26e1-4797-97bf-5b1963c70395": {
+        "document_id": "295c0255-26e1-4797-97bf-5b1963c70395",
+        "filename": "notice.pdf",
+        "metadata": {
+            "document_type": "Notification",
+            "structure": [
+                {
+                    "order": 1,
+                    "heading": "Overview and Admit Card Release Schedule",
+                    "purpose": "To announce the conduct of the examination and provide the schedule and official website for admit card download.",
+                    "content_type": "mixed",
+                    "mandatory": true
+                },
+                {
+                    "order": 2,
+                    "heading": "Admit Card Download Procedure and Verification",
+                    "purpose": "To instruct candidates on the procedure for downloading the admit card and essential details to verify.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 3,
+                    "heading": "Important Instructions and Information",
+                    "purpose": "To advise candidates to review detailed instructions and confirm examination centre information.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 4,
+                    "heading": "Assistance for Downloading",
+                    "purpose": "To provide contact information for candidates requiring support with admit card download.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 5,
+                    "heading": "Official Websites for Updates",
+                    "purpose": "To direct candidates to official sources for the latest information and announcements.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                }
+            ],
+            "document_flow": [
+                "Overview and Admit Card Release Schedule",
+                "Admit Card Download Procedure and Verification",
+                "Important Instructions and Information",
+                "Assistance for Downloading",
+                "Official Websites for Updates"
+            ],
+            "section_count": 5,
+            "total_pages": 1,
+            "ocr_pages": 1,
+            "languages": [
+                "unknown"
+            ]
+        },
+        "pages": [
+            {
+                "page": 1,
+                "source": "ocr",
+                "image_path": "backend/data/pages\\page_1.png",
+                "word_count": 290,
+                "text": "राष्ट्रीय परीक्षा एजेंसी\nराष्टरीप आपवान आपाग\nNational Testing Agency\nNATIONAL VEDICAL COMMISSION\nErcelleucaw As sessment\nसत्यमेव जयते\nउच्चत्तर शिक्षा विभाग,\nमंत्रालय भारत सरकार के तहत एक स्वायत्त संगठन)\n(An Aulonomous Organizalion under Ina Depariment of Higner Education Ministry of Education Govemmeni रof India)\nPUBLIC NOTICE\n१४ June २०२६\nSubjectः   Release of Admit Cards for the Candidates of National Eligibility cum Entrance Test\nINEET (UG)I -२०२६, Scheduled on २१ June २०२६- reg\nNational Testing Agency will conduct the National Eligibility cum Entrance Test INEET (UG)]\n2026\non २१ June २०२६ (Sunday) from O२:०० PM. to O५:१५ PM. (lndian Standard Time).  The Admit Cards\nare\nreleased as per the\nfollowing schedule:\nExamination\nRelease of Admit Card\nWebsite for\ndownloading Admit Card\nNEET (UG)\n2026\n१4 June २०२६\nhttps /Ineet nta nicain\nReexamination\nThe candidates are\n required to download their Admit Card of NEET (UG) - २०२६, scheduled on २१ June\n2026\ntheir   login\ncredentials   from\nthe NTA\nofficial\nwebsite  only\nat httpslneetanta nicin\nw.e.f. l4 June २०२६. Candidatcs should vcrify their Bank Account dctails for refund before\ndownloading\nthe Admit Card.\nThe candidates are advised to go through the instructions contained therein as well as in the Information\nBulletin. The information about the allotted centre is available in the Admit Card.\nIn case any candidate faces difficulty in\ndownloading the Admit Card for NEET (UG)\n२०२6, shelhe\nmay contact NTA at 01 1-40759000/011-69227700 or e-mail at neetugzozo@nta acin\nThe\nCandidates\nalc\nadvised\nt०\nvisit\nthe\nofficial\nwebsites\nof  NTA\nhtips / WWW nta acain\nand\nhttps  /neet nta nic in for the latest updates.\nD\n७\n१V\nDirector General\nNTA\nसम्पर्क सूत्र _\nHelpline Number: +91-11-४०७५९०००, e-mail: neetugzozs@nta ac.in\nवेबसाइट\nWebsite wwW nta ac.in, https / /neet nta nicin/\nशिक्षा \nbeing\nusing"
+            }
+        ]
+    },
+    "40286e5e-7c4c-4262-ba7b-5397b7f5e33a": {
+        "document_id": "40286e5e-7c4c-4262-ba7b-5397b7f5e33a",
+        "filename": "notice.pdf",
+        "metadata": {
+            "document_type": "Notification",
+            "structure": [
+                {
+                    "order": 1,
+                    "heading": "Introduction",
+                    "purpose": "To state the main topic of the public notice and provide context regarding the examination and the release of admit cards.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 2,
+                    "heading": "Admit Card Release Schedule",
+                    "purpose": "To provide a clear schedule for the release of admit cards, including relevant websites for downloading.",
+                    "content_type": "mixed",
+                    "mandatory": true
+                },
+                {
+                    "order": 3,
+                    "heading": "Admit Card Download Instructions",
+                    "purpose": "To guide candidates on the process of downloading their admit cards and to highlight important verification steps before downloading.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 4,
+                    "heading": "Important Instructions for Candidates",
+                    "purpose": "To advise candidates on additional information they should consult, such as instructions in the information bulletin, and where to find specific details like the exam center.",
+                    "content_type": "paragraph",
+                    "mandatory": false
+                },
+                {
+                    "order": 5,
+                    "heading": "Assistance and Support",
+                    "purpose": "To provide contact information for candidates who face difficulties in downloading their admit cards.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 6,
+                    "heading": "Official Websites for Updates",
+                    "purpose": "To direct candidates to official sources for the latest updates and information related to the examination.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                }
+            ],
+            "document_flow": [
+                "Introduction",
+                "Admit Card Release Schedule",
+                "Admit Card Download Instructions",
+                "Important Instructions for Candidates",
+                "Assistance and Support",
+                "Official Websites for Updates"
+            ],
+            "section_count": 6,
+            "total_pages": 1,
+            "ocr_pages": 1,
+            "languages": [
+                "unknown"
+            ]
+        },
+        "pages": [
+            {
+                "page": 1,
+                "source": "ocr",
+                "image_path": "backend/data/pages\\page_1.png",
+                "word_count": 290,
+                "text": "राष्ट्रीय परीक्षा एजेंसी\nराष्टरीप आपवान आपाग\nNational Testing Agency\nNATIONAL VEDICAL COMMISSION\nErcelleucaw As sessment\nसत्यमेव जयते\nउच्चत्तर शिक्षा विभाग,\nमंत्रालय भारत सरकार के तहत एक स्वायत्त संगठन)\n(An Aulonomous Organizalion under Ina Depariment of Higner Education Ministry of Education Govemmeni रof India)\nPUBLIC NOTICE\n१४ June २०२६\nSubjectः   Release of Admit Cards for the Candidates of National Eligibility cum Entrance Test\nINEET (UG)I -२०२६, Scheduled on २१ June २०२६- reg\nNational Testing Agency will conduct the National Eligibility cum Entrance Test INEET (UG)]\n2026\non २१ June २०२६ (Sunday) from O२:०० PM. to O५:१५ PM. (lndian Standard Time).  The Admit Cards\nare\nreleased as per the\nfollowing schedule:\nExamination\nRelease of Admit Card\nWebsite for\ndownloading Admit Card\nNEET (UG)\n2026\n१4 June २०२६\nhttps /Ineet nta nicain\nReexamination\nThe candidates are\n required to download their Admit Card of NEET (UG) - २०२६, scheduled on २१ June\n2026\ntheir   login\ncredentials   from\nthe NTA\nofficial\nwebsite  only\nat httpslneetanta nicin\nw.e.f. l4 June २०२६. Candidatcs should vcrify their Bank Account dctails for refund before\ndownloading\nthe Admit Card.\nThe candidates are advised to go through the instructions contained therein as well as in the Information\nBulletin. The information about the allotted centre is available in the Admit Card.\nIn case any candidate faces difficulty in\ndownloading the Admit Card for NEET (UG)\n२०२6, shelhe\nmay contact NTA at 01 1-40759000/011-69227700 or e-mail at neetugzozo@nta acin\nThe\nCandidates\nalc\nadvised\nt०\nvisit\nthe\nofficial\nwebsites\nof  NTA\nhtips / WWW nta acain\nand\nhttps  /neet nta nic in for the latest updates.\nD\n७\n१V\nDirector General\nNTA\nसम्पर्क सूत्र _\nHelpline Number: +91-11-४०७५९०००, e-mail: neetugzozs@nta ac.in\nवेबसाइट\nWebsite wwW nta ac.in, https / /neet nta nicin/\nशिक्षा \nbeing\nusing"
+            }
+        ]
+    },
+    "54cc5412-8cf2-4442-b1ae-4f139316685b": {
+        "document_id": "54cc5412-8cf2-4442-b1ae-4f139316685b",
+        "filename": "notice.pdf",
+        "metadata": {
+            "document_type": "Notification",
+            "structure": [
+                {
+                    "order": 1,
+                    "heading": "Introduction",
+                    "purpose": "Announce the examination details and the purpose of the public notice regarding the release of admit cards.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 2,
+                    "heading": "Admit Card Release Schedule",
+                    "purpose": "Provide a detailed schedule for the release of admit cards, including relevant websites.",
+                    "content_type": "table",
+                    "mandatory": true
+                },
+                {
+                    "order": 3,
+                    "heading": "Admit Card Download Instructions and Verification",
+                    "purpose": "Instruct candidates on how to download their admit cards using login credentials and emphasize the need for bank account detail verification for refund purposes.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 4,
+                    "heading": "General Instructions and Information",
+                    "purpose": "Advise candidates to review important instructions, refer to the information bulletin, and note that examination center details are available on the admit card.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 5,
+                    "heading": "Contact for Assistance",
+                    "purpose": "Provide contact details for candidates who encounter difficulties in downloading their admit cards.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                },
+                {
+                    "order": 6,
+                    "heading": "Official Websites for Latest Updates",
+                    "purpose": "Direct candidates to the official websites for accessing the latest information and updates.",
+                    "content_type": "paragraph",
+                    "mandatory": true
+                }
+            ],
+            "document_flow": [
+                "Introduction",
+                "Admit Card Release Schedule",
+                "Admit Card Download Instructions and Verification",
+                "General Instructions and Information",
+                "Contact for Assistance",
+                "Official Websites for Latest Updates"
+            ],
+            "section_count": 6,
+            "total_pages": 1,
+            "ocr_pages": 1,
+            "languages": [
+                "unknown"
+            ]
+        },
+        "pages": [
+            {
+                "page": 1,
+                "source": "ocr",
+                "image_path": "backend/data/pages\\page_1.png",
+                "word_count": 290,
+                "text": "राष्ट्रीय परीक्षा एजेंसी\nराष्टरीप आपवान आपाग\nNational Testing Agency\nNATIONAL VEDICAL COMMISSION\nErcelleucaw As sessment\nसत्यमेव जयते\nउच्चत्तर शिक्षा विभाग,\nमंत्रालय भारत सरकार के तहत एक स्वायत्त संगठन)\n(An Aulonomous Organizalion under Ina Depariment of Higner Education Ministry of Education Govemmeni रof India)\nPUBLIC NOTICE\n१४ June २०२६\nSubjectः   Release of Admit Cards for the Candidates of National Eligibility cum Entrance Test\nINEET (UG)I -२०२६, Scheduled on २१ June २०२६- reg\nNational Testing Agency will conduct the National Eligibility cum Entrance Test INEET (UG)]\n2026\non २१ June २०२६ (Sunday) from O२:०० PM. to O५:१५ PM. (lndian Standard Time).  The Admit Cards\nare\nreleased as per the\nfollowing schedule:\nExamination\nRelease of Admit Card\nWebsite for\ndownloading Admit Card\nNEET (UG)\n2026\n१4 June २०२६\nhttps /Ineet nta nicain\nReexamination\nThe candidates are\n required to download their Admit Card of NEET (UG) - २०२६, scheduled on २१ June\n2026\ntheir   login\ncredentials   from\nthe NTA\nofficial\nwebsite  only\nat httpslneetanta nicin\nw.e.f. l4 June २०२६. Candidatcs should vcrify their Bank Account dctails for refund before\ndownloading\nthe Admit Card.\nThe candidates are advised to go through the instructions contained therein as well as in the Information\nBulletin. The information about the allotted centre is available in the Admit Card.\nIn case any candidate faces difficulty in\ndownloading the Admit Card for NEET (UG)\n२०२6, shelhe\nmay contact NTA at 01 1-40759000/011-69227700 or e-mail at neetugzozo@nta acin\nThe\nCandidates\nalc\nadvised\nt०\nvisit\nthe\nofficial\nwebsites\nof  NTA\nhtips / WWW nta acain\nand\nhttps  /neet nta nic in for the latest updates.\nD\n७\n१V\nDirector General\nNTA\nसम्पर्क सूत्र _\nHelpline Number: +91-11-४०७५९०००, e-mail: neetugzozs@nta ac.in\nवेबसाइट\nWebsite wwW nta ac.in, https / /neet nta nicin/\nशिक्षा \nbeing\nusing"
+            }
+        ]
+    }
+}

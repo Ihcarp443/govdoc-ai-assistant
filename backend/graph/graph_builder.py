@@ -1,11 +1,13 @@
 from langgraph.graph import (StateGraph, START, END)
-from langgraph.checkpoint.memory import MemorySaver
+# from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.sqlite import SqliteSaver
 from graph.state import GraphState
 from graph.nodes.extract_docs import extractor
 from graph.nodes.rag_node import rag_node
 from graph.nodes.intent_node import (intent_node, route)
 from graph.nodes.draft_node import draft_node
 
+from db_repo.checkpoint import checkpoint_conn
 
 builder = StateGraph(GraphState)
 
@@ -30,6 +32,7 @@ builder.add_conditional_edges(
 
 builder.add_edge("rag", END)
 builder.add_edge("draft", END)
-check = MemorySaver()
+# check = MemorySaver()
+check = SqliteSaver(conn=checkpoint_conn)
 graph = builder.compile(checkpointer=check)
 print('Graph compiled succesfully')

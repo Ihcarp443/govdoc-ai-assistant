@@ -7,6 +7,8 @@ from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
+print("HF_TOKEN:", os.getenv("HF_TOKEN"))
+
 
 class HfProvider:
 
@@ -17,6 +19,7 @@ class HfProvider:
             huggingfacehub_api_token=os.getenv("HF_TOKEN"),
             max_new_tokens=1000,    
     )   
+
 
     def generate(self, prompt):
         model = ChatHuggingFace(llm=self.llm)

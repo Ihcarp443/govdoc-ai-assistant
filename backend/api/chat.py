@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import uuid
 import traceback
 from graph.graph_builder import graph
+from db_repo.thread_repository import save_thread
 
 router = APIRouter()
 
@@ -20,8 +21,15 @@ async def chat(req: ChatRequest):
     print(req)
     if req.thread_id is None:
         thread_id = req.thread_id or str(uuid.uuid4())
+        save_thread(
+            thread_id,
+            user_id=req.user_id,
+            title=req.message[:50],
+            
+        )
     else:
         thread_id = req.thread_id
+
     
     user_id=req.user_id or '1234'
     print("user_id",user_id)
