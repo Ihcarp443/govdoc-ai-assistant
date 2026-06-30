@@ -11,6 +11,7 @@ import AdminToolsDialog from "@/components/ui/toolDialog";
 import { FileText, FileDown ,History,LogOut} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import ThreeDotsLoader from "@/components/ui/laoder";
 import { Toaster } from "@/components/ui/sonner";
 import {
   DropdownMenu,
@@ -36,6 +37,12 @@ const[threadId,setThreadId]=useState(null)
 const bottomRef = useRef(null);
 const [messages, setMessages] = useState([]);
 
+const handleTextareaChange = (e) => {
+  setInput(e.target.value);
+
+  e.target.style.height = "0px";
+  e.target.style.height = `${e.target.scrollHeight}px`;
+};
 
 useEffect(() => {
     setUserType(localStorage.getItem("userType"));
@@ -51,51 +58,89 @@ useEffect(()=>{
 const handleSendMessage = async () => {
 
   if (!input.trim() && selectedFiles.length === 0) return;
+  const attachedFiles = selectedFiles.map(file => ({
+    name: file.name,
+    size: file.size,
+    type: file.type,
+  }));
   const userMessage = {
     id: Date.now().toString(),
     role: "user",
     content: input,
-
+    files: attachedFiles,
   };
-
+      const loadingMessage = {
+      id: crypto.randomUUID(),
+      role: "assistant",
+      loading: true,
+      content: "",
+    };
   // Show user's message immediately
-  setMessages((prev) => [...prev, userMessage]);
+  setMessages((prev) => [...prev, userMessage,loadingMessage]);
+  // setMessages((prev) => [...prev, loadingMessage]);
   setisLoading(true)
-  const question = input;
   setInput("");
+  setSelectedFiles([]);
+  const question = input;
   try {
+
       const response = await sendMessage({
       userId,
       threadId,
       message: question,
       files: selectedFiles,
     });
-
+    console.log("Response from sendMessage:", response);
     const currentThreadId = threadId || response.thread_id;
+
     setThreadId(currentThreadId);
 
-    const assistantMessage = {
-      id: (Date.now() + 1).toString(),
-      role: "assistant",
-      content: response.answer,
-      timestamp: new Date(),
-      };
+    // const assistantMessage = {
+    //   id: (Date.now() + 1).toString(),
+    //   role: "assistant",
+    //   content: response.answer,
+    //   timestamp: new Date(),
+    //   loading: false,
+    //   answer_type: response.answer_type,
+    //   };
 
-      setMessages((prev) => [...prev, assistantMessage]);
-      setSelectedFiles([]);
+    //   setMessages((prev) => [...prev, assistantMessage]);
+      setMessages(prev =>
+        prev.map(msg =>
+        msg.id === loadingMessage.id
+        ? {
+          ...msg,
+          loading: false,
+          content: response.answer,
+          answer_type: response.answer_type,
+        }
+      : msg
+      )
+);
 
   } catch (error) {
     console.error(error);
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: (Date.now() + 2).toString(),
-        role: "assistant",
-        content: "Something went wrong while processing your request.",
-        timestamp: new Date(),
-      },
-    ]);
+    // setMessages((prev) => [
+    //   ...prev,
+    //   {
+    //     id: (Date.now() + 2).toString(),
+    //     role: "assistant",
+    //     content: "Something went wrong while processing your request.",
+    //     timestamp: new Date(),
+    //   },
+    // ]);
+    setMessages(prev =>
+  prev.map(msg =>
+    msg.id === loadingMessage.id
+      ? {
+          ...msg,
+          loading: false,
+          content: "Something went wrong while processing your request.",
+        }
+      : msg
+  )
+);
   }
   finally{
     setisLoading(false)
@@ -104,11 +149,12 @@ const handleSendMessage = async () => {
 };
 
 
-const handleDownload = async (documentId, format) => {
+const handleDownload = async (content, format) => {
   try {
     await downloadDocument({
-      documentId,
-      format,
+      markdown: content,
+      fileType: format,
+      fileName: `Report_${Date.now()}.${format}`,
     });
   } catch (error) {
     console.error(error);
@@ -123,7 +169,7 @@ const handleLogout = () => {
 
   router.push("/");
 };
-const isNewChat = messages.length === 1;
+const isNewChat = messages.length === 0;
 
 const renderComposer = () => (
   <div className="w-full max-w-4xl mx-auto">
@@ -145,92 +191,106 @@ const renderComposer = () => (
               onClick={() =>
                 setSelectedFiles((prev) =>
                   prev.filter((_, i) => i !== index)
-                )
-              }
-            >
+                )}>
               <X className="h-3 w-3 cursor-pointer hover:text-red-500" />
             </button>
           </div>
         ))}
       </div>
     )}
+  <div className="rounded-3xl border border-border bg-background px-4 py-1 shadow-sm">
+   <div className="flex items-center gap-3">
+    <input
+      ref={fileInputRef}
+      type="file"
+      multiple
+      disabled={isLoading}
+      accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+      className="hidden"
+      onChange={(e) => {
+        const files = Array.from(e.target.files || []);
 
-    <div className="rounded-2xl border bg-background px-3 py-3 shadow-sm">
-      <div className="flex items-center gap-2">
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          disabled={isLoading}
-          accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-          className="hidden"
-          onChange={(e) => {
-            const files = Array.from(e.target.files || []);
-            setSelectedFiles(prev => {
-                  const existing = new Set(prev.map(f => f.name));
+        setSelectedFiles(prev => {
+          const existing = new Set(prev.map(f => f.name));
 
-                  return [
-                      ...prev,
-                      ...files.filter(f => !existing.has(f.name))
-                  ];
-              });
+          return [
+            ...prev,
+            ...files.filter(f => !existing.has(f.name))
+          ];
+        });
 
-            e.target.value = "";
-          }}
-        />
+        e.target.value = "";
+      }}
+    />
 
-        <Button
-          disabled={isLoading}
-          variant="ghost"
-          size="icon"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <Upload className="h-6 w-6" />
-        </Button>
+    <Button
+      variant="ghost"
+      size="icon"
+      disabled={isLoading}
+      className="h-10 w-10 rounded-full shrink-0"
+      onClick={() => fileInputRef.current?.click()}
+    >
+      <Upload className="h-9 w-9" />
+    </Button>
 
-        <Input
-          type="text"
-          disabled={isLoading}
-          placeholder="Ask anything about your documents..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSendMessage();
-            }
-          }}
-          className="h-12 flex-1 border-none bg-transparent text-lg shadow-none focus-visible:ring-0 "
-        />
+    <textarea
+      disabled={isLoading}
+      onChange={handleTextareaChange}
+      rows={1}
+      placeholder="Ask anything about your documents..."
+      value={input}
+      // onChange={(e) => setInput(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          handleSendMessage();
+        }
+      }}
+      className="
+        flex-1
+        min-h-[28px]
+        max-h-40
+        resize-none
+        overflow-y-auto
+        border-0
+        bg-transparent
+        px-0
+        py-3
+        text-md
+        leading-7
+        shadow-none
+        outline-none
+        ring-0
+        focus:outline-none
+        focus:ring-0
+      "
+    />
 
-          <Button
-            disabled={isLoading}
-            variant="ghost"
-            size="sm"
-            onClick={() => setOpenTools(true)}
-          >
-            <Sparkles className="mr-2 h-4 w-4" />
-            Tools
-          </Button>
+    <Button
+      variant="ghost"
+      size="sm"
+      disabled={isLoading}
+      className="rounded-full px-3"
+      onClick={() => setOpenTools(true)}
+    >
+      <Sparkles className="mr-2 h-4 w-4" />
+      Tools
+    </Button>
 
-        <Button
-          size="icon"
-          className="h-10 w-10 rounded-full shrink-0"
-          disabled={
-            isLoading ||
-            (!input.trim() && selectedFiles.length === 0)
-          }
-          onClick={handleSendMessage}
-        >
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Send className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
-    </div>
+    <Button
+      size="icon"
+      disabled={
+        isLoading ||
+        (!input.trim() && selectedFiles.length === 0)
+      }
+      className="h-9 w-9 rounded-full"
+      onClick={handleSendMessage}
+    >
+        <Send className="h-5 w-5" />
+    </Button>
   </div>
+</div>
+</div>
 );
 
   return (
@@ -241,7 +301,7 @@ const renderComposer = () => (
             <Avatar className="h-9 w-9 bg-primary flex items-center justify-center">
             <Bot className="h-5 w-5 text-primary-foreground" />
           </Avatar>
-            <div className="font-semibold text-xl">Docu Assist</div>
+            <div className="font-semibold text-xl">DocuAssist</div>
           </div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -276,7 +336,7 @@ const renderComposer = () => (
         <Bot className="h-16 w-16 text-primary mb-6" />
 
             <h1 className="text-4xl font-bold">
-              Docu Assist
+              DocuAssist
             </h1>
                 
             <p className="text-muted-foreground mt-3 mb-10 text-center max-w-md">
@@ -287,6 +347,7 @@ const renderComposer = () => (
             {renderComposer()}
           </div>
         ) : (
+
           <>
        <ScrollArea className="flex-1 p-4">
          <div className="max-w-5xl mx-auto space-y-4">
@@ -368,7 +429,33 @@ const renderComposer = () => (
                       `}
                     >
                      {msg.role === "user" ? (
-                          <p>{msg.content}</p>
+                          <>
+                            {msg.content && <p>{msg.content}</p>}
+                                              
+                            {msg.files?.length > 0 && (
+                              <div className="mt-3 space-y-2">
+                                {msg.files.map((file, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center gap-2 rounded-md bg-white/10 px-3 py-2"
+                                  >
+                                    <Paperclip className="h-4 w-4" />
+                                
+                                    <span className="text-sm truncate">
+                                      {file.name}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </>
+                        ) :
+                        msg.loading ? (
+                          <div className="flex justify-start">
+                            <div className="rounded-2xl rounded-bl-sm bg-slate-200 px-4 py-3">
+                              <ThreeDotsLoader />
+                            </div>
+                          </div>
                         ) : (
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {msg.content}
@@ -376,20 +463,14 @@ const renderComposer = () => (
                         )}
                     </div>
                     {msg.role === "assistant" &&
-                        msg.type === "document" &&
-                        msg.documentId && (
+                        msg.answer_type === "document" &&(
                           <div className="mt-4 flex flex-wrap gap-2">
                           
                             <Button
                               size="sm"
                               variant="secondary"
                               className="cursor-pointer"
-                              onClick={() =>
-                                handleDownload({
-                                  documentId: msg.documentId,
-                                  format: "pdf",
-                                })
-                              }
+                              onClick={() => handleDownload(msg.content, "pdf")}
                             >
                               <FileDown className="mr-2 h-4 w-4" />
                               Download PDF
@@ -400,10 +481,7 @@ const renderComposer = () => (
                               variant="secondary"
                               className="cursor-pointer"
                               onClick={() =>
-                                handleDownload({
-                                  documentId: msg.documentId,
-                                  format: "docx",
-                                })
+                                handleDownload(msg.content, "docx")
                               }
                             >
                               <FileText className="mr-2 h-4 w-4" />

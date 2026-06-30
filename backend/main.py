@@ -16,7 +16,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(export_router,prefix="/report",tags=["Export"])
+
+app.include_router(export_router,prefix="",tags=["Export"])
 app.include_router(chat_router, prefix="", tags=['Chat'])
 app.include_router(upload_router, prefix="", tags=['Upload'])
 init_db()

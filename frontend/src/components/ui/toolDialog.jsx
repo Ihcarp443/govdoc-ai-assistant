@@ -13,6 +13,7 @@ const AdminToolsDialog = ({open,onOpenChange,onSelectTool,role}) => {
 
       const toolOptions = [
       {
+        ID: 1,
         title: "Summarize",
         roles: ["public", "admin"],
         icon: FileText,
@@ -22,6 +23,7 @@ const AdminToolsDialog = ({open,onOpenChange,onSelectTool,role}) => {
           "Summarize this document in concise bullet points highlighting the important information.",
       },
       {
+        ID: 2,
         title: "Draft Reply",
         roles: ["public", "admin"],
         icon: FilePen,
@@ -31,6 +33,7 @@ const AdminToolsDialog = ({open,onOpenChange,onSelectTool,role}) => {
           "Draft a professional response based on the uploaded document.",
       },
       {
+        ID: 3,
         title: "Analyze Document",
         roles: ["public", "admin"],
         icon: SearchCheck,
@@ -59,7 +62,7 @@ const AdminToolsDialog = ({open,onOpenChange,onSelectTool,role}) => {
 
     return (
       <button
-        key={tool.id}
+        key={tool.ID}
         onClick={() => onSelectTool(tool.prompt)}
         className={`cursor-pointer flex items-center gap-3 rounded-lg border px-5 py-2 text-left transition-all hover:shadow-md ${tool.color}`}
       >

@@ -1,65 +1,9 @@
-# from fastapi import APIRouter
-# from fastapi.responses import FileResponse
-# from pydantic import BaseModel
-# import os
-
-# from services.export_service import ExportService
-
-# router = APIRouter()
-
-# export_service = ExportService()
-
-
-# class ExportRequest(BaseModel):
-
-#     report: str
-
-#     file_type: str
-
-#     file_name: str | None = None
-
-
-# @router.post("/export")
-# def export_report(request: ExportRequest):
-
-#     filename = request.file_name
-
-#     if filename is None:
-
-#         filename = f"report.{request.file_type}"
-
-#     path = export_service.export(
-
-#         text=request.report,
-
-#         file_type=request.file_type,
-
-#         file_name=filename
-
-#     )
-
-#     media_types = {
-
-#         "pdf": "application/pdf",
-
-#         "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-
-#     }
-
-#     return FileResponse(
-
-#         path=path,
-
-#         filename=os.path.basename(path),
-
-#         media_type=media_types[request.file_type]
-
-#     )
-
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import uuid
 import os
+
 from services.export_service import ExportService
 
 router = APIRouter()
@@ -68,33 +12,42 @@ export_service = ExportService()
 
 
 class ExportRequest(BaseModel):
-    report: str          # Markdown
+    markdown: str
     file_type: str
     file_name: str | None = None
 
 
 @router.post("/export")
-def export_report(request: ExportRequest):
+async def export_document(req: ExportRequest):
+    try:
 
-    filename = request.file_name
+        extension = req.file_type.lower()
 
-    if filename is None:
-        filename = f"report.{request.file_type}"
+        if extension not in ["pdf", "docx"]:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid file type"
+            )
 
-    path = export_service.export(
-        markdown=request.report,
-        file_type=request.file_type,
-        file_name=filename
-    )
+        filename = req.file_name or f"{uuid.uuid4()}.{extension}"
 
-    media_types = {
-        "pdf": "application/pdf",
-        "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    }
-    
-    # Generate id send in dict
-    return FileResponse(
-        path=path,
-        filename=os.path.basename(path),
-        media_type=media_types[request.file_type]
-    )
+        if not filename.endswith(f".{extension}"):
+            filename += f".{extension}"
+
+        file_path = export_service.export(
+            markdown=req.markdown,
+            file_type=extension,
+            file_name=filename
+        )
+
+        return FileResponse(
+            path=file_path,
+            filename=filename,
+            media_type="application/octet-stream"
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
