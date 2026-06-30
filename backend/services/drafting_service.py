@@ -1,5 +1,6 @@
 from rag.retrieval import Retriever
-from services.llm_service import model
+# from services.llm_service import model\
+from providers.llm.hf_provider import HfProvider
 
 
 class DraftingService:
@@ -86,7 +87,7 @@ Reference Documents retrieved from the knowledge base:
 
 Return only the drafted document.
 """
-
-        response = model.invoke(prompt)
+        model = HfProvider()
+        response = model.generate(prompt)
 
         return response.content

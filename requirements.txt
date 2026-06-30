@@ -34,3 +34,5 @@ google-genai
 
 python-docx
 reportlab
+
+langgraph-checkpoint-sqlite

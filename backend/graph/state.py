@@ -26,8 +26,6 @@ class GraphState(TypedDict, total=False):
 
     # Processed Documents
     docs: List[Dict[str, Any]]
-    # docs:List[str]
-
     # Routing
     intent: str
 

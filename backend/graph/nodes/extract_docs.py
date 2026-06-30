@@ -1,6 +1,9 @@
 from services.document_ingestion import DocumentIngestionService
 from graph.state import GraphState
 from rag.document_store import DocumentStore
+from rag.chunking import ChunkingService
+from rag.embeddings import EmbeddingService
+from rag.vector_store import FAISSStore
 
 def extract_document(paths):
     service = DocumentIngestionService()
@@ -10,15 +13,9 @@ def extract_document(paths):
         results.append(result)
     print("Results",results)
     return results
-    # return service.process_pdf(path)
-
-from rag.chunking import ChunkingService
-from rag.embeddings import EmbeddingService
-from rag.vector_store import FAISSStore
-
 
 def store_documents(documents, user_id):
-
+    
     if not documents:
         return
 
