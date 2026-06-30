@@ -110,3 +110,28 @@ def delete_thread(thread_id: str, user_id: str):
     print(f"Deleted thread with id: {thread_id} for user: {user_id}")
     conn.commit()
     conn.close()
+
+
+def update_thread_title(
+    thread_id: str,
+    user_id: str,
+    title: str
+):
+    conn = get_db_connection()
+
+    conn.execute(
+        """
+        UPDATE threads
+        SET title = ?
+        WHERE thread_id = ?
+          AND user_id = ?
+        """,
+        (
+            title,
+            thread_id,
+            user_id
+        )
+    )
+
+    conn.commit()
+    conn.close()

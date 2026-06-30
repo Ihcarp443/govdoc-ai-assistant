@@ -27,7 +27,7 @@ async def upload_files(
         save_thread(
             thread_id,
             user_id=req.user_id or '1234',
-            title=req.message[:50],
+            title="New Chat",
         )
     else:
         thread_id = thread_id
