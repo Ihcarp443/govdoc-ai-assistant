@@ -89,9 +89,11 @@ class ExportService:
     # PUBLIC
     # ----------------------------
 
-    def export(self, markdown, file_type, file_name):
+    def export(self, markdown, file_type, file_name, path):
 
-        path = os.path.join("exports", file_name)
+       
+
+        os.makedirs(os.path.dirname(path), exist_ok=True)
 
         if file_type == "docx":
             self.export_docx(markdown, path)

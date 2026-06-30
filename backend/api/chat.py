@@ -20,7 +20,7 @@ class ChatRequest(BaseModel):
 async def chat(req: ChatRequest):
     print("req",req)
     if req.thread_id is None:
-        thread_id = req.thread_id or str(uuid.uuid4())
+        thread_id = str(uuid.uuid4())
         save_thread(
             thread_id,
             user_id=req.user_id or '1234',
