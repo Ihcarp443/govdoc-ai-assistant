@@ -11,7 +11,11 @@ chroma_db/
 .idea/
 .vscode/
 
+backend/DB/
+backend/sessions/
+
 backend/backend/data/pages/
+backend/data/pages/
 
 venv/
 .venv/

@@ -4,7 +4,8 @@ import uuid
 import traceback
 from graph.graph_builder import graph
 from db_repo.thread_repository import save_thread
-
+# , update_thread_title
+# from services.title_generator import generate_title
 router = APIRouter()
 
 print("Chat triggered successfully")
@@ -20,7 +21,7 @@ class ChatRequest(BaseModel):
 async def chat(req: ChatRequest):
     print("req",req)
     if req.thread_id is None:
-        thread_id = req.thread_id or str(uuid.uuid4())
+        thread_id = str(uuid.uuid4())
         save_thread(
             thread_id,
             user_id=req.user_id or '1234',
@@ -36,16 +37,7 @@ async def chat(req: ChatRequest):
             "thread_id": thread_id
         }
     }
-    # state = {
-    #     # "input_type": "text",
-    #     "user_id":user_id,
-    #     "ques_en":req.message,
-    #     # "input_type": req.input_type,
-    #     "input_text": req.message,
-    #     "channel":"website",
-    #     "messages": [],
-    #     "paths": req.paths
-    # }
+  
     state = {
         "user_id": user_id,
         "user_question": req.message,
@@ -61,6 +53,17 @@ async def chat(req: ChatRequest):
             state,
             config=config
         )
+        # uncomment for title genration
+        # title = generate_title(
+        #     question=req.message,
+        #     answer=result["answer_en"]
+        # )
+
+        # update_thread_title(
+        #     thread_id,
+        #     user_id,
+        #     title
+        # )
 
         return {
             "success": True,

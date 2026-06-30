@@ -5,6 +5,7 @@ import uuid
 import os
 
 from services.export_service import ExportService
+from db_repo.doc_repository import save_document
 
 router = APIRouter()
 
@@ -12,8 +13,10 @@ export_service = ExportService()
 
 
 class ExportRequest(BaseModel):
-    markdown: str
+    report: str
     file_type: str
+    thread_id: str
+    user_id: str
     file_name: str | None = None
 
 
@@ -21,33 +24,46 @@ class ExportRequest(BaseModel):
 async def export_document(req: ExportRequest):
     try:
 
-        extension = req.file_type.lower()
+    GENERATED_DIR = "generated"
 
-        if extension not in ["pdf", "docx"]:
-            raise HTTPException(
-                status_code=400,
-                detail="Invalid file type"
-            )
+    filename = request.file_name or f"report.{request.file_type}"
 
-        filename = req.file_name or f"{uuid.uuid4()}.{extension}"
+    base_path = os.path.join(
+        GENERATED_DIR,
+        request.user_id,
+        request.thread_id
+    )
 
-        if not filename.endswith(f".{extension}"):
-            filename += f".{extension}"
+    os.makedirs(base_path, exist_ok=True)
 
-        file_path = export_service.export(
-            markdown=req.markdown,
-            file_type=extension,
-            file_name=filename
-        )
+    full_path = os.path.join(base_path, filename)
 
-        return FileResponse(
-            path=file_path,
-            filename=filename,
-            media_type="application/octet-stream"
-        )
+    path = export_service.export(
+        markdown=request.report,
+        file_type=request.file_type,
+        file_name=full_path,
+        path = full_path
+    )
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=str(e)
-        )
+    media_types = {
+        "pdf": "application/pdf",
+        "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    }
+    
+
+    save_document(
+        thread_id=request.thread_id,
+        user_id=request.user_id,
+        filename=os.path.basename(path),
+        original_filename=filename,
+        display_name=os.path.splitext(filename)[0],
+        category="generated",
+        file_type=request.file_type,
+        file_path=path
+    )
+
+    return FileResponse(
+        path=path,
+        filename=os.path.basename(path),
+        media_type=media_types[request.file_type]
+    )
