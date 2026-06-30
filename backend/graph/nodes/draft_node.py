@@ -8,5 +8,6 @@ def draft_node(state: GraphState):
     drafter = DraftingService(user_id)
     draft_response = drafter.generate(user_question, extracted_docs)
     return {
-        "answer_en" : draft_response
+        "answer_en" : draft_response,
+        "answer_type":"document"
     }

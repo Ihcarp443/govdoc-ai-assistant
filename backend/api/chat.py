@@ -13,24 +13,22 @@ class ChatRequest(BaseModel):
     message: str
     thread_id: str | None = None
     input_type: str
-    user_id: str
+    user_id: str | None = None
     paths: list[str] = []
 
 @router.post("/chat")
 async def chat(req: ChatRequest):
-    print(req)
+    print("req",req)
     if req.thread_id is None:
         thread_id = req.thread_id or str(uuid.uuid4())
         save_thread(
             thread_id,
-            user_id=req.user_id,
+            user_id=req.user_id or '1234',
             title=req.message[:50],
-            
         )
     else:
         thread_id = req.thread_id
 
-    
     user_id=req.user_id or '1234'
     print("user_id",user_id)
     config = {
@@ -54,7 +52,8 @@ async def chat(req: ChatRequest):
         # "input_type": req.input_type,
         "channel": "website",
         "messages": [],
-        "paths": req.paths
+        "paths": req.paths,
+        "answer_type": "text"
     }
 
     try:
@@ -66,7 +65,8 @@ async def chat(req: ChatRequest):
         return {
             "success": True,
             "thread_id": thread_id,
-            "answer": result.get("answer_en", "")
+            "answer": result.get("answer_en", ""),
+            "answer_type": result.get("answer_type", "")
         }
     
     except Exception as e:

@@ -31,6 +31,7 @@ class GraphState(TypedDict, total=False):
 
     # Final Response
     answer_en: str
+    answer_type: str
 
 # from typing import Annotated, Any, Dict, List, Optional
 # from langchain_core.messages import BaseMessage

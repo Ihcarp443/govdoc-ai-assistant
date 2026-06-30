@@ -1,8 +1,5 @@
 import sqlite3
 
-
-
-
 def init_db():
     conn = get_db_connection()
 

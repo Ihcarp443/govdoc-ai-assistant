@@ -13,6 +13,7 @@ def create_threads_table():
     """)
 
     conn.commit()
+    
 
 
 def save_thread(

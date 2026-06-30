@@ -1,5 +1,6 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+
 export const downloadDocument = async ({
   documentId,
   format, // "pdf" | "docx"

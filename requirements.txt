@@ -36,3 +36,9 @@ python-docx
 reportlab
 
 langgraph-checkpoint-sqlite
+
+markdown
+
+bs4
+
+docling

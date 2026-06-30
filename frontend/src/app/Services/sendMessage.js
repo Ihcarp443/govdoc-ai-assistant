@@ -1,11 +1,12 @@
+
 export const sendMessage = async ({
     message,
     files,
     threadId,
     userId
 }) => {
-
-    let uploadedFiles = [];
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+    let uploadedPaths = [];
 
     if (files.length > 0) {
 
@@ -18,32 +19,47 @@ export const sendMessage = async ({
         formData.append("thread_id", threadId);
         formData.append("user_id", userId);
 
-        const uploadResponse = await fetch(
-            "/api/upload",
-            {
-                method: "POST",
-                body: formData
-            }
-        );
+        // const uploadResponse = await fetch("/upload", {
+        //     method: "POST",
+        //     body: formData
+        // });
+        const uploadResponse = await fetch(`${API_BASE_URL}/upload`, {
+              method: "POST",
+              body: formData,
+            });
 
-        uploadedFiles = await uploadResponse.json();
+        const uploadData = await uploadResponse.json();
+
+        uploadedPaths = uploadData.paths;
     }
 
-    const questionResponse = await fetch(
-        "/api/chat",
-        {
-            method: "POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify({
-                user_id:userId,
-                thread_id:threadId,
-                question:message,
-                uploaded_files:uploadedFiles
-            })
-        }
-    );
+    // Then ask question
+    // const questionResponse = await fetch("/chat", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     },
+    //     body: JSON.stringify({
+    //         message,
+    //         thread_id: threadId,
+    //         user_id: userId,
+    //         input_type: "text",
+    //         paths: uploadedPaths
+    //     })
+    // });
+    const questionResponse = await fetch(`${API_BASE_URL}/chat`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message,
+            thread_id: threadId,
+            user_id: userId,
+            input_type: "text",
+            paths: uploadedPaths,
+          }),
+        });
 
     return questionResponse.json();
-}
+};

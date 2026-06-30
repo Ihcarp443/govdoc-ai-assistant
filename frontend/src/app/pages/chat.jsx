@@ -34,9 +34,7 @@ const[isLoading,setisLoading]=useState(false)
 const[userId,setUserId]=useState("")
 const[threadId,setThreadId]=useState(null)
 const bottomRef = useRef(null);
-const [messages, setMessages] = useState([
-    { id: "1", role: "assistant", content: "Hi! I'm your document assistant. Upload PDFs or images and ask me questions.", timestamp: new Date() }
-  ]);
+const [messages, setMessages] = useState([]);
 
 
 useEffect(() => {
@@ -51,29 +49,29 @@ useEffect(()=>{
 },[messages]);
 
 const handleSendMessage = async () => {
+
   if (!input.trim() && selectedFiles.length === 0) return;
   const userMessage = {
     id: Date.now().toString(),
     role: "user",
     content: input,
-    timestamp: new Date(),
+
   };
 
   // Show user's message immediately
   setMessages((prev) => [...prev, userMessage]);
   setisLoading(true)
   const question = input;
-
   setInput("");
-
   try {
-    const response = await sendMessage({
+      const response = await sendMessage({
       userId,
       threadId,
-      question,
+      message: question,
       files: selectedFiles,
     });
-    const currentThreadId = threadId || response.threadId;
+
+    const currentThreadId = threadId || response.thread_id;
     setThreadId(currentThreadId);
 
     const assistantMessage = {
@@ -81,16 +79,11 @@ const handleSendMessage = async () => {
       role: "assistant",
       content: response.answer,
       timestamp: new Date(),
+      };
 
-      type: response.type,              // "chat" | "document"
-      documentId: response.document_id, // unique document id
-      reportName: response.report_name, // optional
-    };
+      setMessages((prev) => [...prev, assistantMessage]);
+      setSelectedFiles([]);
 
-    setMessages((prev) => [...prev, assistantMessage]);
-
-    // Clear uploaded files after successful send
-    setSelectedFiles([]);
   } catch (error) {
     console.error(error);
 
@@ -196,6 +189,7 @@ const renderComposer = () => (
         </Button>
 
         <Input
+          type="text"
           disabled={isLoading}
           placeholder="Ask anything about your documents..."
           value={input}
@@ -295,7 +289,7 @@ const renderComposer = () => (
         ) : (
           <>
        <ScrollArea className="flex-1 p-4">
-         <div className="max-w-4xl mx-auto space-y-4">
+         <div className="max-w-5xl mx-auto space-y-4">
            {messages.map((msg) => (
              <div
                key={msg.id}
@@ -309,7 +303,7 @@ const renderComposer = () => (
                  className={`max-w-[75%] rounded-2xl px-4 py-3 ${
                    msg.role === "user"
                      ? "rounded-br-sm bg-primary text-primary-foreground"
-                     : "rounded-bl-sm bg-muted"
+                     : "rounded-bl-sm bg-slate-200 text-foreground"
                  }`}
                >
                  {/* <p className="text-sm">{msg.content}</p>    */}
