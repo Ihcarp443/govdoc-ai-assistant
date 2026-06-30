@@ -44,16 +44,57 @@ def save_document(
     conn.commit()
     conn.close()
 
-def get_documents(
-    thread_id: str,
-    user_id: str
-):
+# def get_documents(
+#     thread_id: str,
+#     user_id: str
+# ):
+#     conn = get_db_connection()
+
+#     cursor = conn.execute(
+#         """
+#         SELECT
+#             document_id,
+#             display_name,
+#             original_filename,
+#             filename,
+#             category,
+#             file_type,
+#             file_path,
+#             created_at
+#         FROM documents
+#         WHERE thread_id = ?
+#           AND user_id = ?
+#         ORDER BY created_at DESC
+#         """,
+#         (thread_id, user_id)
+#     )
+
+#     rows = cursor.fetchall()
+#     conn.close()
+
+#     return [
+#         {
+#             "document_id": row[0],
+#             "display_name": row[1],
+#             "original_filename": row[2],
+#             "filename": row[3],
+#             "category": row[4],       # uploaded/generated
+#             "file_type": row[5],
+#             "file_path": row[6],
+#             "created_at": row[7]
+#         }
+#         for row in rows
+#     ]
+
+
+def get_documents(user_id: str):
     conn = get_db_connection()
 
     cursor = conn.execute(
         """
         SELECT
             document_id,
+            thread_id,
             display_name,
             original_filename,
             filename,
@@ -62,11 +103,10 @@ def get_documents(
             file_path,
             created_at
         FROM documents
-        WHERE thread_id = ?
-          AND user_id = ?
+        WHERE user_id = ?
         ORDER BY created_at DESC
         """,
-        (thread_id, user_id)
+        (user_id,)
     )
 
     rows = cursor.fetchall()
@@ -75,13 +115,14 @@ def get_documents(
     return [
         {
             "document_id": row[0],
-            "display_name": row[1],
-            "original_filename": row[2],
-            "filename": row[3],
-            "category": row[4],       # uploaded/generated
-            "file_type": row[5],
-            "file_path": row[6],
-            "created_at": row[7]
+            "thread_id": row[1],
+            "display_name": row[2],
+            "original_filename": row[3],
+            "filename": row[4],
+            "category": row[5],
+            "file_type": row[6],
+            "file_path": row[7],
+            "created_at": row[8]
         }
         for row in rows
     ]

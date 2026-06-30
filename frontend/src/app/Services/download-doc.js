@@ -1,44 +1,55 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const downloadDocument = async ({
-    markdown,
-    fileType,
-    fileName
+  report,
+  fileType,
+  fileName,
+  threadId,
+  userId,
+  uploadedFileName,
 }) => {
+  const response = await fetch(`${BASE_URL}/export`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      report: report,
+      file_type: fileType,
+      thread_id: threadId,
+      user_id: userId,
+      uploaded_file_name: uploadedFileName,
+      file_name: fileName,
+    }),
+  });
+if (!response.ok) {
+  const err = await response.json();
+  console.error("Export Error:", err);
+  throw new Error(err.detail || "Export failed");
+}
 
-    const response = await fetch(
-        `${BASE_URL}/export`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                markdown,
-                file_type: fileType,
-                file_name: fileName
-            })
-        }
-    );
+  const blob = await response.blob();
 
-    if (!response.ok) {
-        throw new Error("Export failed");
+  // Get filename from backend if available
+  const disposition = response.headers.get("Content-Disposition");
+  let downloadName = fileName;
+
+  if (disposition) {
+    const match = disposition.match(/filename="?([^"]+)"?/);
+    if (match) {
+      downloadName = match[1];
     }
+  }
 
-    const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
 
-    const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = downloadName;
 
-    const a = document.createElement("a");
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 
-    a.href = url;
-    a.download = fileName;
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-    window.URL.revokeObjectURL(url);
+  window.URL.revokeObjectURL(url);
 };

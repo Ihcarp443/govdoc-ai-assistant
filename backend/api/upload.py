@@ -31,7 +31,6 @@ async def upload_files(
         )
     else:
         thread_id = thread_id
-        user_id = '2345'
     print('Uploading')
     # base path: uploads/user_id/thread_id
 

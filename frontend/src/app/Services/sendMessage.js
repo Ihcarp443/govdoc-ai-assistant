@@ -14,15 +14,12 @@ export const sendMessage = async ({
 
         files.forEach(file => {
             formData.append("files", file);
+            formData.append("filenames", file.name);
         });
 
         formData.append("thread_id", threadId);
         formData.append("user_id", userId);
 
-        // const uploadResponse = await fetch("/upload", {
-        //     method: "POST",
-        //     body: formData
-        // });
         const uploadResponse = await fetch(`${API_BASE_URL}/upload`, {
               method: "POST",
               body: formData,

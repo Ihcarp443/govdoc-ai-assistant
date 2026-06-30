@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ThreeDotsLoader from "@/components/ui/laoder";
 import { Toaster } from "@/components/ui/sonner";
+import {getThread} from "../Services/chat-History";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,8 +24,12 @@ import { useRef } from "react";
 import { X, Paperclip } from "lucide-react";
 import { sendMessage } from "../Services/sendMessage";
 import { downloadDocument } from "../Services/download-doc";
+import { useSearchParams } from "next/navigation";
+
 
 const ChatPage = () => {
+
+const searchParams = useSearchParams();
 
 const fileInputRef = useRef(null);
 const [selectedFiles, setSelectedFiles] = useState([]);
@@ -47,6 +52,7 @@ const handleTextareaChange = (e) => {
 useEffect(() => {
     setUserType(localStorage.getItem("userType"));
     setUserId(localStorage.getItem("userId"));
+    setThreadId(searchParams.get("threadId") || null);
   }, []);
 
 useEffect(()=>{
@@ -54,6 +60,22 @@ useEffect(()=>{
         behavior:"smooth"
     });
 },[messages]);
+useEffect(() => {
+  if (!threadId) return;
+  const loadThread = async () => {
+    try {
+      const data = await getThread(threadId);
+      console.log(data);
+
+      // Convert backend state into messages
+      setMessages(data.state.messages || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  loadThread();
+}, [threadId]);
 
 const handleSendMessage = async () => {
 
@@ -152,11 +174,16 @@ const handleSendMessage = async () => {
 const handleDownload = async (content, format) => {
   try {
     await downloadDocument({
-      markdown: content,
+      report: content,
       fileType: format,
       fileName: `Report_${Date.now()}.${format}`,
+      threadId,
+      userId,
+      uploadedFileName:"abc"
     });
-  } catch (error) {
+}
+
+catch (error) {
     console.error(error);
   }
 };

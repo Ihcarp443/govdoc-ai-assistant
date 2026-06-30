@@ -30,9 +30,6 @@ class ExportService:
     # ----------------------------
 
     def export(self, markdown, file_type, file_name, path):
-
-       
-
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
         if file_type == "docx":
