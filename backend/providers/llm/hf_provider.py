@@ -23,6 +23,4 @@ class HfProvider:
         response = model.invoke(
             prompt
         )
-        return response 
-
-    
+        return response
