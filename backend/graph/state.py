@@ -5,9 +5,8 @@ from langgraph.graph.message import TypedDict, add_messages
 
 class ChatMessage(TypedDict):
     role: str
-    text: str
-    lang: str
-
+    content: str
+    answer_type: str
 
 class GraphState(TypedDict, total=False):
 
@@ -42,8 +41,8 @@ class GraphState(TypedDict, total=False):
 
 # class ChatMessage(TypedDict):
 #     role: str
-#     text: str
-#     lang: str
+#     content: str
+#     answer_type: str
 
 # class GraphState(TypedDict, total=False):
 #     messages: Annotated[List[BaseMessage], add_messages]

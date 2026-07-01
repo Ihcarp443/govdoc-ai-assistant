@@ -162,10 +162,7 @@ class Retriever:
         top_k: int = 3
     ):
 
-        chunks = self.retrieve(
-            query=query,
-            top_k=top_k * 3
-        )
+        chunks = self.retrieve(query=query,top_k=top_k * 3)
 
         if not chunks:
             return []

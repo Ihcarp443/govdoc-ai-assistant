@@ -4,7 +4,7 @@ from rag.document_store import DocumentStore
 from rag.chunking import ChunkingService
 from rag.embeddings import EmbeddingService
 from rag.vector_store import FAISSStore
-
+from db_repo.thread_repository import add_chat_message
 def extract_document(paths,state):
     service = DocumentIngestionService(state)
     results = []
@@ -57,7 +57,7 @@ def store_documents(documents, user_id):
 def extractor(state: GraphState):
     paths = state["paths"]
     user_id = state["user_id"]
-
+    ques=state.get("user_question","")
     extracted_docs = extract_document(paths,state)
 
     if extracted_docs:
@@ -67,5 +67,6 @@ def extractor(state: GraphState):
         )
 
     return {
-        "docs": extracted_docs
+        "docs": extracted_docs,
+        "chat_history": add_chat_message(state, "user", ques, "text"),
     }

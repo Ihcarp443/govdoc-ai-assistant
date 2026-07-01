@@ -28,9 +28,8 @@ import { useSearchParams } from "next/navigation";
 
 
 const ChatPage = () => {
-
+const router=useRouter()
 const searchParams = useSearchParams();
-
 const fileInputRef = useRef(null);
 const [selectedFiles, setSelectedFiles] = useState([]);
 const [openTools, setOpenTools] = useState(false);
@@ -61,22 +60,22 @@ useEffect(()=>{
     });
 },[messages]);
 
-// useEffect(() => {
-//   if (!threadId) return;
-//   const loadThread = async () => {
-//     try {
-//       const data = await getThread(threadId);
-//       console.log(data);
+useEffect(() => {
+  if (!threadId) return;
+  const loadThread = async () => {
+    try {
+      const data = await getThread(threadId);
+      console.log("data", data);
 
-//       // Convert backend state into messages
-//       setMessages(data.state.messages || []);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
+      // Convert backend state into messages
+      setMessages(data.state.chat_history || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-//   loadThread();
-// }, [threadId]);
+  loadThread();
+}, [threadId]);
 
 const handleSendMessage = async () => {
 
@@ -179,7 +178,7 @@ catch (error) {
   }
 };
 
-const router=useRouter()
+
 
 const handleLogout = () => {
   localStorage.removeItem("userId");

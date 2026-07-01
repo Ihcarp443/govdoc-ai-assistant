@@ -135,3 +135,17 @@ def update_thread_title(
 
     conn.commit()
     conn.close()
+
+
+
+def add_chat_message(state, role, text,answer_type):
+    history = state.get("chat_history", [])
+    print("Adding chat message:", history)
+    print("Role:", role, "Text:", text, "Answer Type:", answer_type)
+    return history + [
+        {
+            "role": role,
+            "content": text,
+            "answer_type": answer_type
+        }
+    ]

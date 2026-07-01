@@ -25,8 +25,7 @@ async def get_thread_messages(thread_id: str):
 
     try:
         state = graph.get_state(config)
-        # print("thread-grpah-state")
-        # print(state)
+        # print("state", state.values)
         return {
             "success": True,
             "thread_id": thread_id,
@@ -63,7 +62,7 @@ async def get_thread_messages(thread_id: str):
 #             "error": str(e)
 #         }
 
-@router.delete("/{thread_id}/{user_id}")
+@router.delete("/delete/{thread_id}/{user_id}")
 def remove_thread(thread_id: str, user_id: str):
     try:
         delete_thread(thread_id, user_id)

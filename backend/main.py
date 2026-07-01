@@ -8,6 +8,7 @@ from db_repo.sqlite import init_db
 from api.documents import router as document_router
 from api.login import router as login_router
 from api.signup import router as signup_router
+from api.downloadfile import router as download_router
 app = FastAPI()
 
 app.add_middleware(
@@ -30,4 +31,5 @@ app.include_router(document_router, prefix="/documents", tags=["Documents"])
 app.include_router(login_router, prefix="/auth", tags=["login"])
 app.include_router(signup_router, prefix="/auth", tags=["signup"])
 
+app.include_router(download_router, prefix="", tags=["Download"])
 init_db()

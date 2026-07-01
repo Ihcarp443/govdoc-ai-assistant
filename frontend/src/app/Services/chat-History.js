@@ -13,7 +13,7 @@ export const getChatHistory = async (userId) => {
 
 
 export const getThread = async (threadId) => {
-  const response = await fetch(`${API_URL}/thread/${threadId}`);
+  const response = await fetch(`${API_URL}/${threadId}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch thread");
@@ -23,7 +23,7 @@ export const getThread = async (threadId) => {
 };
 
 export const deleteChat = async (threadId, userId) => {
-  const response = await fetch(`${API_URL}/thread/${threadId}/${userId}`, {
+  const response = await fetch(`${API_URL}/delete/${threadId}/${userId}`, {
     method: "DELETE",
   });
 

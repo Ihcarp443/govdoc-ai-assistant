@@ -63,9 +63,9 @@ def intent_node(state: GraphState):
         prompt.format(user_question)
     )
 
-    state["intent"] = response.content.strip().lower()
+    # state["intent"] = response.content.strip().lower()
 
-    return state
+    return {"intent":response.content.strip().lower()}
 
 def route(state):
 

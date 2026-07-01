@@ -5,8 +5,8 @@ from providers.llm.hf_provider import HfProvider
 
 class DraftingService:
 
-    def __init__(self,user_id):
-        self.retriever = Retriever(user_id)
+    def __init__(self,user_id,thread_id):
+        self.retriever = Retriever(user_id,thread_id)
 
     def generate(self, query, user_docs=None):
         documents = self.retriever.retrieve_documents(

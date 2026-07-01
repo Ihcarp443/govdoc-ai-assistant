@@ -5,6 +5,8 @@ import { Separator } from "@/components/ui/separator";
 import { FileText, Image as  Plus, Clock, File, } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getChatHistory } from "../Services/chat-History";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import {
   Trash2,
   Download,
@@ -23,11 +25,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import downloadDocument from "../Services/download-doc";
+import {handleDownload} from "../Services/downloadfile";
 import { useRouter } from "next/navigation";
 import { HistoryCardSkeleton } from "@/components/ui/historyCardSkelton";
 // import { Badge } from "@/components/ui/badge";
-import { deleteChat } from "../Services/delete-chat";
+import { deleteChat } from "../Services/chat-History";
 // import { downloadDocument } from "../Services/get-document";
 import { getDocuments } from "../Services/chat-History";
 const ChatHistory = () => {
@@ -57,6 +59,8 @@ const documentsByThread = documents.reduce((acc, doc) => {
   return acc;
 }, {});
 
+
+
 useEffect(() => {
   if (!userId) return;
   const loadData = async () => {
@@ -81,18 +85,21 @@ useEffect(() => {
   loadData();
 }, [userId]);
 // const threadDocuments = documentsByThread[history.thread_id] || [];
+
+
 const handleDelete = async (threadId) => {
   try {
     await deleteChat(threadId, userId);
-
+    toast.success("Chat deleted successfully");
     setHistories((prev) =>
       prev.filter((item) => item.thread_id !== threadId)
     );
     setDocuments(prev =>
-  prev.filter(doc => doc.thread_id !== threadId)
+    prev.filter(doc => doc.thread_id !== threadId)
 );
   } catch (err) {
     console.error(err);
+    toast.error("Failed to delete chat");
   }
 };
 
@@ -100,10 +107,14 @@ const handleDelete = async (threadId) => {
     setSelectedThreadDocuments(docs);
     setDialogOpen(true);
   };
-
+const downloadFile = (documentId, displayName, filePath) => {
+  // Implementation for downloading file
+  handleDownload(documentId, displayName, filePath);
+};
 
   return (
     <div className="h-screen w-full bg-background">
+      <Toaster richColors position="top-center" />
       <div className="h-full max-w-7xl mx-auto p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -117,7 +128,7 @@ const handleDelete = async (threadId) => {
           </Button>
         </div>
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, index) => (
             <HistoryCardSkeleton key={index} />
@@ -181,24 +192,24 @@ const handleDelete = async (threadId) => {
                 <div>
                 <div className="text-xs font-medium text-muted-foreground">Documents ({threadDocuments.length})</div>
                 <div className="flex flex-wrap gap-2 mt-2">
-  <div className="flex flex-wrap gap-2 mt-2">
-  {threadDocuments.slice(0, 3).map((doc) => (
-    <div
-      key={doc.document_id}
-      className="flex items-center gap-1 text-xs bg-muted px-2 py-1 rounded"
-      onClick={(e) => {
-                        e.stopPropagation();
-                        openDocumentsDialog(threadDocuments);
-      }}
-    >
-      <File className="h-3 w-3" />
-
-      <span className="truncate max-w-[120px]"  >
-        {doc.display_name}
-      </span>
-    </div>
-  ))}
-</div>
+             <div className="flex flex-wrap gap-2 mt-2">
+             {threadDocuments.slice(0, 3).map((doc) => (
+               <div
+                 key={doc.document_id}
+                 className="flex items-center gap-1 text-xs bg-muted px-2 py-1 rounded"
+                 onClick={(e) => {
+                                   e.stopPropagation();
+                                   openDocumentsDialog(threadDocuments);
+                 }}
+               >
+                 <File className="h-3 w-3" />
+               
+                 <span className="truncate max-w-[120px]"  >
+                   {doc.display_name}
+                 </span>
+               </div>
+             ))}
+               </div>
 
               {threadDocuments.length > 3 && (
                 <div className="mt-2 text-xs text-muted-foreground0 cursor-pointer hover:underline" onClick={(e) => {
@@ -298,7 +309,7 @@ const handleDelete = async (threadId) => {
                   variant="ghost"
                   className="hover:bg-primary/10"
                   onClick={() =>
-                    downloadFile(doc.document_id, doc.display_name)
+                    downloadFile(doc.document_id, doc.display_name,doc.file_path)
                   }
                 >
                   <Download className="h-4 w-4" />

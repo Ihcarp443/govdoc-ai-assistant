@@ -4,7 +4,8 @@ from rag.vector_store import FAISSStore
 from rag.retrieval import Retriever
 from providers.llm.hf_provider import HfProvider
 from graph.state import GraphState
-
+from db_repo.thread_repository import add_chat_message
+from langchain_core.messages import AIMessage
 def rag_node(state: GraphState):
     user_question = state["user_question"]
     user_id = state.get("user_id", None) 
@@ -38,8 +39,14 @@ def rag_node(state: GraphState):
     model = HfProvider()
     # LLM response
     response = model.generate(prompt)
+    # print("Rag node response:", response)
+    print("Rag node history:", state.get("chat_history", []))
     return {
-        'answer_en':response.content
+        'answer_en':response.content,
+        "messages": [
+            AIMessage(content=response.content)
+        ],
+        "chat_history":add_chat_message(state, "assistant", response.content,"text")
     }
 
 

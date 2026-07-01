@@ -10,6 +10,10 @@ import { Upload, Image as  Sparkles, FileSearch, Shield, Zap } from "lucide-reac
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 // import { Label } from "@/components/ui/label";
 import { login, signup } from "../Services/auth";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { Toast } from "radix-ui";
 
 const Home = () => {
   const [open, setOpen] = useState(false);
@@ -28,21 +32,21 @@ const Home = () => {
       if (response.success) {
         localStorage.setItem("user", JSON.stringify(response.user));
 
-        alert("Login Successful");
+        toast.success("Login Successful");
 
         setOpen(false);
       } else {
-        alert(response.detail);
+        toast.error(response.detail);
       }
     } catch (err) {
       console.error(err);
-      alert("Login Failed");
+      toast.error("Login Failed");
     }
   };
 
   const handleSignup = async () => {
     if (signupPassword !== confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -54,20 +58,22 @@ const Home = () => {
       );
 
       if (response.success) {
-        alert("Signup Successful");
+        
+        toast.success("Signup Successful");
 
         setOpen(false);
       } else {
-        alert(response.detail);
+        toast.error(response.detail);
       }
     } catch (err) {
       console.error(err);
-      alert("Signup Failed");
+      toast.error("Signup Failed");
     }
   };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-primary/5 flex flex-col">
+      <Toaster richColors position="top-center" />
       <header className="border-b border-border/50 backdrop-blur-sm bg-background/80 sticky top-0 z-40">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">

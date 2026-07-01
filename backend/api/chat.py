@@ -4,6 +4,7 @@ import uuid
 import traceback
 from graph.graph_builder import graph
 from db_repo.thread_repository import save_thread
+from langchain_core.messages import HumanMessage,AIMessage
 # , update_thread_title
 # from services.title_generator import generate_title
 router = APIRouter()
@@ -30,20 +31,21 @@ async def chat(req: ChatRequest):
     else:
         thread_id = req.thread_id
 
-    user_id=req.user_id or '1234'
+    user_id=req.user_id
     print("user_id",user_id)
     config = {
         "configurable": {
             "thread_id": thread_id
         }
     }
-  
+
     state = {
         "user_id": user_id,
         "user_question": req.message,
-        # "input_type": req.input_type,
         "channel": "website",
-        "messages": [],
+        "messages": [
+            HumanMessage(content=req.message)
+        ],
         "paths": req.paths,
         "answer_type": "text"
     }
@@ -69,7 +71,7 @@ async def chat(req: ChatRequest):
             "success": True,
             "thread_id": thread_id,
             "answer": result.get("answer_en", ""),
-            "answer_type": result.get("answer_type", "")
+            "answer_type": result.get("answer_type", ""),
         }
     
     except Exception as e:
