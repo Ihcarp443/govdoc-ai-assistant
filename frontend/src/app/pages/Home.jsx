@@ -9,11 +9,62 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Upload, Image as  Sparkles, FileSearch, Shield, Zap } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 // import { Label } from "@/components/ui/label";
-
+import { login, signup } from "../Services/auth";
 
 const Home = () => {
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState("public");
+  const [signinEmail, setSigninEmail] = useState("");
+  const [signinPassword, setSigninPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const router = useRouter();
+  const handleLogin = async () => {
+  try {
+      const response = await login(signinEmail, signinPassword);
+
+      if (response.success) {
+        localStorage.setItem("user", JSON.stringify(response.user));
+
+        alert("Login Successful");
+
+        setOpen(false);
+      } else {
+        alert(response.detail);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Login Failed");
+    }
+  };
+
+  const handleSignup = async () => {
+    if (signupPassword !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await signup(
+        signupEmail,
+        signupPassword,
+        fullName
+      );
+
+      if (response.success) {
+        alert("Signup Successful");
+
+        setOpen(false);
+      } else {
+        alert(response.detail);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Signup Failed");
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-primary/5 flex flex-col">
@@ -44,11 +95,22 @@ const Home = () => {
                 <TabsContent value="signin" className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-email">Email</Label>
-                    <Input id="signin-email" type="email" placeholder="you@example.com" />
+                    {/* <Input id="signin-email" type="email" placeholder="you@example.com" /> */}
+                    <Input
+                        type="email"
+                        value={signinEmail}
+                        onChange={(e) => setSigninEmail(e.target.value)}
+                        placeholder="you@example.com"
+                      />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signin-password">Password</Label>
-                    <Input id="signin-password" type="password" placeholder="••••••••" />
+                    <Input
+                        type="password"
+                        value={signinPassword}
+                        onChange={(e) => setSigninPassword(e.target.value)}
+                      />
+                    {/* <Input id="signin-password" type="password" placeholder="••••••••" /> */}
                   </div>
                 <div className="space-y-3">
                     <Label>Role</Label>
@@ -68,7 +130,11 @@ const Home = () => {
                       </div>
                     </RadioGroup>
                   </div>
-                  <Button className="w-full" onClick={() => setOpen(false)}>Sign In</Button>
+                  {/* <Button className="w-full" onClick={() => setOpen(false)}>Sign In</Button> */}
+                  <Button className="w-full" onClick={handleLogin}>
+                        Sign In
+                      </Button>
+                  
                   {/* <p className="text-xs text-center text-muted-foreground">
                     Forgot password? <a href="#" className="text-primary hover:underline">Reset here</a>
                   </p> */}
@@ -76,22 +142,46 @@ const Home = () => {
                 <TabsContent value="signup" className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-name">Full Name</Label>
-                    <Input id="signup-name" placeholder="John Doe" />
+                    <Input
+                      id="signup-name"
+                      placeholder="John Doe"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
-                    <Input id="signup-email" type="email" placeholder="you@example.com" />
+                    <Input
+                      type="email"
+                      value={signupEmail}
+                      onChange={(e) => setSignupEmail(e.target.value)}
+                      placeholder="you@example.com"
+                    />
+                    {/* <Input id="signup-email" type="email" placeholder="you@example.com" /> */}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
-                    <Input id="signup-password" type="password" placeholder="••••••••" />
+                    <Input
+                        type="password"
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                      />
+                    {/* <Input id="signup-password" type="password" placeholder="••••••••" /> */}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-confirm">Confirm Password</Label>
-                    <Input id="signup-confirm" type="password" placeholder="••••••••" />
+                    <Input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
+                    {/* <Input id="signup-confirm" type="password" placeholder="••••••••" /> */}
                   </div>
 
-                  <Button className="w-full" onClick={() => setOpen(false)}>Create Account</Button>
+                  {/* <Button className="w-full" onClick={() => setOpen(false)}>Create Account</Button>*/}
+                  <Button className="w-full" onClick={handleSignup}>
+                    Create Account
+                  </Button> 
                   <p className="text-xs text-center text-muted-foreground">
                     By signing up, you agree to our <a href="#" className="text-primary hover:underline">Terms</a> and <a href="#" className="text-primary hover:underline">Privacy Policy</a>
                   </p>

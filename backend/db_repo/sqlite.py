@@ -42,14 +42,29 @@ def init_db():
         )
     """)
 
+    # conn.execute("""
+    # CREATE TABLE IF NOT EXISTS users (
+    #     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    #     phone TEXT UNIQUE NOT NULL,
+    #     password TEXT NOT NULL,
+    #     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    #     )
+    # """)
+    # conn.execute("""
+    #     DROP TABLE IF EXISTS users;
+    # """)
+
     conn.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        phone TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            user_type TEXT NOT NULL DEFAULT 'public',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
     """)
+
     conn.execute("""
         CREATE TABLE IF NOT EXISTS documents (
             document_id TEXT PRIMARY KEY,

@@ -40,5 +40,5 @@ langgraph-checkpoint-sqlite
 markdown
 
 bs4
-
+passlib
 docling
