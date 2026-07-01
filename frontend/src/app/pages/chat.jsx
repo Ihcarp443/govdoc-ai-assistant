@@ -60,22 +60,23 @@ useEffect(()=>{
         behavior:"smooth"
     });
 },[messages]);
-useEffect(() => {
-  if (!threadId) return;
-  const loadThread = async () => {
-    try {
-      const data = await getThread(threadId);
-      console.log(data);
 
-      // Convert backend state into messages
-      setMessages(data.state.messages || []);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+// useEffect(() => {
+//   if (!threadId) return;
+//   const loadThread = async () => {
+//     try {
+//       const data = await getThread(threadId);
+//       console.log(data);
 
-  loadThread();
-}, [threadId]);
+//       // Convert backend state into messages
+//       setMessages(data.state.messages || []);
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   loadThread();
+// }, [threadId]);
 
 const handleSendMessage = async () => {
 
@@ -117,16 +118,6 @@ const handleSendMessage = async () => {
 
     setThreadId(currentThreadId);
 
-    // const assistantMessage = {
-    //   id: (Date.now() + 1).toString(),
-    //   role: "assistant",
-    //   content: response.answer,
-    //   timestamp: new Date(),
-    //   loading: false,
-    //   answer_type: response.answer_type,
-    //   };
-
-    //   setMessages((prev) => [...prev, assistantMessage]);
       setMessages(prev =>
         prev.map(msg =>
         msg.id === loadingMessage.id

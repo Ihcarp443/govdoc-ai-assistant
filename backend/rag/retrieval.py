@@ -4,8 +4,9 @@ from rag.document_store import DocumentStore
 
 class Retriever:
 
-    def __init__(self, user_id):
+    def __init__(self, user_id, thread_id):
         self.user_id = user_id
+        self.thread_id = thread_id
 
         self.embedding_model = SentenceTransformer(
             "BAAI/bge-small-en-v1.5"
@@ -57,7 +58,9 @@ class Retriever:
                 continue
 
             chunk = self.store.metadata[idx]
-
+            if chunk.get("thread_id") != self.thread_id:
+                continue
+                
             unique_key = (
                 chunk["document_id"],
                 chunk["chunk_index"]
@@ -131,25 +134,25 @@ class Retriever:
         # -------------------------------
         print("\n================ RETRIEVAL RESULTS ================\n")
 
-        for i, result in enumerate(results, start=1):
+        # for i, result in enumerate(results, start=1):
 
-            print(f"[{i}] CrossEncoder : {result['score']:.4f}")
-            print(f"    FAISS Score : {result['faiss_score']:.4f}")
-            print(f"    File        : {result['filename']}")
-            print(f"    Type        : {result['document_type']}")
-            print(f"    Pages       : {result['pages']}")
-            print(f"    Sources     : {', '.join(result['sources'])}")
-            print(f"    Chunk Index : {result['chunk_index']}")
-            print(f"    Words       : {result['word_count']}")
+        #     print(f"[{i}] CrossEncoder : {result['score']:.4f}")
+        #     print(f"    FAISS Score : {result['faiss_score']:.4f}")
+        #     print(f"    File        : {result['filename']}")
+        #     print(f"    Type        : {result['document_type']}")
+        #     print(f"    Pages       : {result['pages']}")
+        #     print(f"    Sources     : {', '.join(result['sources'])}")
+        #     print(f"    Chunk Index : {result['chunk_index']}")
+        #     print(f"    Words       : {result['word_count']}")
 
-            preview = result["text"].replace("\n", " ")
+        #     preview = result["text"].replace("\n", " ")
 
-            if len(preview) > 350:
-                preview = preview[:350] + "..."
+        #     if len(preview) > 350:
+        #         preview = preview[:350] + "..."
 
-            print()
-            print(preview)
-            print("\n--------------------------------------------------\n")
+        #     print()
+        #     print(preview)
+        #     print("\n--------------------------------------------------\n")
 
         return results
     

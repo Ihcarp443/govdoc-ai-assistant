@@ -147,6 +147,8 @@ class ChunkingService:
 
                 "chunk_id": str(uuid.uuid4()),
 
+                "thread_id": document["metadata"].get("thread_id"),
+
                 "document_id": document["document_id"],
 
                 "filename": document["filename"],
@@ -172,17 +174,17 @@ class ChunkingService:
             })
         print(f"\nTotal Chunks Created: {len(chunks)}")
         print("="*50)
-        for chunk in chunks:
-            print(f"Chunk ID: {chunk['chunk_id']}")
-            print(f"Document ID: {chunk['document_id']}")
-            print(f"Filename: {chunk['filename']}")
-            print(f"Document Type: {chunk['document_type']}")
-            print(f"Chunk Index: {chunk['chunk_index']}")
-            print(f"Pages: {chunk['pages']}")
-            print(f"Sources: {chunk['sources']}")
-            print(f"Word Count: {chunk['word_count']}")
-            print(f"Char Count: {chunk['char_count']}")
-            print(f"Char Start: {chunk['char_start']}")
-            print(f"Char End: {chunk['char_end']}")
-            print("-"*50)
+        # for chunk in chunks:
+        #     print(f"Chunk ID: {chunk['chunk_id']}")
+        #     print(f"Document ID: {chunk['document_id']}")
+        #     print(f"Filename: {chunk['filename']}")
+        #     print(f"Document Type: {chunk['document_type']}")
+        #     print(f"Chunk Index: {chunk['chunk_index']}")
+        #     print(f"Pages: {chunk['pages']}")
+        #     print(f"Sources: {chunk['sources']}")
+        #     print(f"Word Count: {chunk['word_count']}")
+        #     print(f"Char Count: {chunk['char_count']}")
+        #     print(f"Char Start: {chunk['char_start']}")
+        #     print(f"Char End: {chunk['char_end']}")
+        #     print("-"*50)
         return chunks

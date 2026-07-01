@@ -9,11 +9,11 @@ from services.structure_extractor import StructureExtractor
 from providers.layout.docling_provider import DoclingProvider
 class DocumentIngestionService:
 
-    def __init__(self):
+    def __init__(self,state):
 
         self.pdf_extractor = PDFExtractor()
         self.ocr_provider = EasyOCRProvider()
-
+        self.state=state
         self.document_classifier = DocumentClassifier(GeminiProvider())
         self.structure_extractor = StructureExtractor(GeminiProvider())
         self.layout_provider = DoclingProvider()
@@ -46,24 +46,25 @@ class DocumentIngestionService:
                 "source": source,
                 "image_path": page["image_path"],
                 "word_count": len(extracted_text.split()),
-                "text": extracted_text
+                "text": extracted_text,
             })
 
         document_type = self.document_classifier.classify(processed_pages)
         layout_markdown = self.layout_provider.extract_layout(pdf_path)
-        print(f"\nLayout Markdown:\n{layout_markdown}\n")
+        # print(f"\nLayout Markdown:\n{layout_markdown}\n")
         structure = self.structure_extractor.extract(processed_pages, layout_markdown)
-        print(f"\nExtracted Structure:\n{structure}\n")
+        # print(f"\nExtracted Structure:\n{structure}\n")
         
         # document_type = "unlabeled"
         return {
             "document_id": str(uuid.uuid4()),
             "filename": os.path.basename(pdf_path),
-
+            "pages": processed_pages,
             "metadata": {
-
                 "document_type": document_type,
-
+                
+                "thread_id": self.state.get("thread_id"),
+                
                 "structure": structure["sections"],
 
                 "document_flow": [
@@ -86,7 +87,7 @@ class DocumentIngestionService:
                 })
             },
 
-            "pages": processed_pages
+            
         }
 
         # return {

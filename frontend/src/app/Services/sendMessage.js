@@ -1,4 +1,4 @@
-
+import { useState } from "react";
 export const sendMessage = async ({
     message,
     files,
@@ -7,6 +7,7 @@ export const sendMessage = async ({
 }) => {
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     let uploadedPaths = [];
+    let thread = threadId;
 
     if (files.length > 0) {
 
@@ -17,7 +18,7 @@ export const sendMessage = async ({
             formData.append("filenames", file.name);
         });
 
-        formData.append("thread_id", threadId);
+        formData.append("thread_id", thread);
         formData.append("user_id", userId);
 
         const uploadResponse = await fetch(`${API_BASE_URL}/upload`, {
@@ -26,24 +27,11 @@ export const sendMessage = async ({
             });
 
         const uploadData = await uploadResponse.json();
-
+        thread=uploadData.thread_id;
         uploadedPaths = uploadData.paths;
     }
 
-    // Then ask question
-    // const questionResponse = await fetch("/chat", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({
-    //         message,
-    //         thread_id: threadId,
-    //         user_id: userId,
-    //         input_type: "text",
-    //         paths: uploadedPaths
-    //     })
-    // });
+
     const questionResponse = await fetch(`${API_BASE_URL}/chat`, {
           method: "POST",
           headers: {
@@ -51,7 +39,7 @@ export const sendMessage = async ({
           },
           body: JSON.stringify({
             message,
-            thread_id: threadId,
+            thread_id: thread,
             user_id: userId,
             input_type: "text",
             paths: uploadedPaths,

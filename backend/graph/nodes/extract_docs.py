@@ -5,13 +5,13 @@ from rag.chunking import ChunkingService
 from rag.embeddings import EmbeddingService
 from rag.vector_store import FAISSStore
 
-def extract_document(paths):
-    service = DocumentIngestionService()
+def extract_document(paths,state):
+    service = DocumentIngestionService(state)
     results = []
     for path in paths:
         result = service.process_pdf(path)
         results.append(result)
-    print("Results",results)
+    # print("Results",results)
     return results
 
 def store_documents(documents, user_id):
@@ -58,7 +58,7 @@ def extractor(state: GraphState):
     paths = state["paths"]
     user_id = state["user_id"]
 
-    extracted_docs = extract_document(paths)
+    extracted_docs = extract_document(paths,state)
 
     if extracted_docs:
         store_documents(

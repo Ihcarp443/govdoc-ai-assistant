@@ -8,9 +8,9 @@ from graph.state import GraphState
 def rag_node(state: GraphState):
     user_question = state["user_question"]
     user_id = state.get("user_id", None) 
-    
+    thread_id = state.get("thread_id", None)
     # Retrieval
-    retriever = Retriever(user_id=user_id)
+    retriever = Retriever(user_id=user_id,thread_id=thread_id)
     results = retriever.retrieve(user_question, top_k=3)
 
     context = "\n\n".join(chunk["text"] for chunk in results)
